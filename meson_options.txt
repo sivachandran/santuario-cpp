@@ -1,0 +1,9 @@
+option('enable-debug', type: 'feature', value: 'disabled', description: 'Produce debug variant')
+
+option('with-xalan', type: 'string', value: '', description: 'Enable Xalan integration from specified path')
+
+option('with-openssl', type: 'string', value: '', description: 'Use the OpenSSL crypto provider from specified path')
+
+option('with-nss', type: 'string', value: '', description: 'Use the NSS crypto provider from specified path')
+
+option('xkms', type: 'feature', value: 'disabled', description: 'Disable XKMS support')

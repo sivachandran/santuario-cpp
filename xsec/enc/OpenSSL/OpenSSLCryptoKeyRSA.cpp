@@ -51,6 +51,10 @@ XSEC_USING_XERCES(ArrayJanitor);
 
 #include <memory.h>
 
+#if !(OPENSSL_VERSION_MAJOR > 0 and OPENSSL_VERSION_MINOR > 0)
+#define OPENSSL_COMPAT_0_9
+#endif
+
 namespace {
 
     // This code is modified from OpenSSL to implement SHA-2 hashing with OAEP.
@@ -63,12 +67,22 @@ namespace {
     {
         long i, outlen = 0;
         unsigned char cnt[4];
-        EVP_MD_CTX c;
+        EVP_MD_CTX* c;
+// OpenSSL 1.1.0+ compatibility
+#ifdef OPENSSL_COMPAT_0_9
+        EVP_MD_CTX cc;
+#endif
         unsigned char md[EVP_MAX_MD_SIZE];
         int mdlen;
         int rv = -1;
 
-        EVP_MD_CTX_init(&c);
+#ifndef OPENSSL_COMPAT_0_9
+        EVP_MD_CTX cc;
+        EVP_MD_CTX_init(&cc)
+        c = &cc
+else
+        c = EVP_MD_CTX_new();
+#endif
         mdlen = EVP_MD_size(dgst);
         if (mdlen < 0)
             goto err;
@@ -78,19 +92,19 @@ namespace {
             cnt[1] = (unsigned char)((i >> 16) & 255);
             cnt[2] = (unsigned char)((i >> 8)) & 255;
             cnt[3] = (unsigned char)(i & 255);
-            if (!EVP_DigestInit_ex(&c,dgst, NULL)
-                || !EVP_DigestUpdate(&c, seed, seedlen)
-                || !EVP_DigestUpdate(&c, cnt, 4))
+            if (!EVP_DigestInit_ex(c,dgst, NULL)
+                || !EVP_DigestUpdate(c, seed, seedlen)
+                || !EVP_DigestUpdate(c, cnt, 4))
                 goto err;
             if (outlen + mdlen <= len)
                 {
-                if (!EVP_DigestFinal_ex(&c, mask + outlen, NULL))
+                if (!EVP_DigestFinal_ex(c, mask + outlen, NULL))
                     goto err;
                 outlen += mdlen;
                 }
             else
                 {
-                if (!EVP_DigestFinal_ex(&c, md, NULL))
+                if (!EVP_DigestFinal_ex(c, md, NULL))
                     goto err;
                 memcpy(mask + outlen, md, len - outlen);
                 outlen = len;
@@ -98,7 +112,11 @@ namespace {
             }
         rv = 0;
     err:
-        EVP_MD_CTX_cleanup(&c);
+#ifndef OPENSSL_COMPAT_0_9
+        EVP_MD_CTX_cleanup(c);
+#else
+        EVP_MD_CTX_free(c);
+#endif
         return rv;
     }
 #endif

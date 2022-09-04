@@ -1,0 +1,7 @@
+[wrap-git]
+url = git@github.com:sivachandran/xerces-c.git
+revision = meson-build/v3.2.3
+depth = 1
+
+[provide]
+dependency_names = xerces-c

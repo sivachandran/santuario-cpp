@@ -1,5 +1,3 @@
-/* xsec/framework/XSECConfig.hpp.in.  Generated from configure.ac by autoheader.  */
-
 /* Define if NSS is in use. */
 #mesondefine XSEC_HAVE_NSS
 
@@ -38,5 +36,20 @@
 
 /* Define to 1 if XKMS support is included. */
 #mesondefine XSEC_XKMS_ENABLED
+
+/* Define to 1 if OpenSSL has EVP_PKEY_id support. */
+#mesondefine XSEC_OPENSSL_HAVE_EVP_PKEY_ID
+
+/* Define to 1 if OpenSSL has PKCS1_MGF1 support. */
+#mesondefine XSEC_OPENSSL_HAVE_MGF1
+
+/* Define to 1 if unistd.h is available. */
+#mesondefine HAVE_UNISTD_H
+
+/* Define to 1 strcasecamp is available. */
+#mesondefine HAVE_STRCASECMP
+
+/* Define to 1 if direct.h is available. */
+#mesondefine HAVE_DIRECT_H
 
 #include <xsec/framework/XSECVersion.hpp>
