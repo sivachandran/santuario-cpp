@@ -65,6 +65,11 @@ framework_sources = [
     'framework/XSECURIResolverXerces.cpp',
 ]
 
+if host_system == 'windows'
+    windows = import('windows')
+    framework_sources += windows.compile_resources('framework/version.rc')
+endif
+
 txfm_sources = [
     'transformers/TXFMBase.cpp',
     'transformers/TXFMChain.cpp',
@@ -104,111 +109,69 @@ utils_sources = [
     'utils/XSECNameSpaceExpander.cpp',
     'utils/XSECPlatformUtils.cpp',
     'utils/XSECSOAPRequestorSimple.cpp',
-    'utils/unixutils/XSECSOAPRequestorSimpleUnix.cpp',
 ]
+
+if host_system == 'windows'
+    utils_sources += 'utils/winutils/XSECSOAPRequestorSimpleWin32.cpp'
+else
+    utils_sources += 'utils/unixutils/XSECSOAPRequestorSimpleUnix.cpp'
+endif
 
 # 'XML', 'Encryption',
 
 xenc_sources = [
     'xenc/impl/XENCCipherReferenceImpl.cpp',
     'xenc/impl/XENCEncryptionMethodImpl.cpp',
-    'xenc/impl/XENCEncryptedKeyImpl.hpp',
     'xenc/impl/XENCCipherValueImpl.cpp',
-    'xenc/impl/XENCCipherImpl.hpp',
-    'xenc/impl/XENCAlgorithmHandlerDefault.hpp',
-    'xenc/impl/XENCCipherDataImpl.hpp',
-    'xenc/impl/XENCEncryptionMethodImpl.hpp',
     'xenc/impl/XENCAlgorithmHandlerDefault.cpp',
     'xenc/impl/XENCEncryptedDataImpl.cpp',
-    'xenc/impl/XENCEncryptedTypeImpl.hpp',
     'xenc/impl/XENCCipherDataImpl.cpp',
-    'xenc/impl/XENCEncryptedDataImpl.hpp',
-    'xenc/impl/XENCCipherValueImpl.hpp',
     'xenc/impl/XENCEncryptedTypeImpl.cpp',
     'xenc/impl/XENCCipherImpl.cpp',
     'xenc/impl/XENCEncryptedKeyImpl.cpp',
-    'xenc/impl/XENCCipherReferenceImpl.hpp',
 ]
 
 # 'XML', 'Key', 'Management',
 xkms_sources = [
     'xkms/XKMSConstants.cpp',
     'xkms/impl/XKMSCompoundRequestImpl.cpp',
-    'xkms/impl/XKMSRevokeKeyBindingImpl.hpp',
     'xkms/impl/XKMSRecoverRequestImpl.cpp',
     'xkms/impl/XKMSRegisterResultImpl.cpp',
     'xkms/impl/XKMSRecoverResultImpl.cpp',
-    'xkms/impl/XKMSValidateResultImpl.hpp',
-    'xkms/impl/XKMSRevokeResultImpl.hpp',
     'xkms/impl/XKMSCompoundResultImpl.cpp',
     'xkms/impl/XKMSRevokeKeyBindingImpl.cpp',
-    'xkms/impl/XKMSCompoundResultImpl.hpp',
-    'xkms/impl/XKMSUnverifiedKeyBindingImpl.hpp',
     'xkms/impl/XKMSKeyBindingAbstractTypeImpl.cpp',
-    'xkms/impl/XKMSQueryKeyBindingImpl.hpp',
     'xkms/impl/XKMSPrototypeKeyBindingImpl.cpp',
     'xkms/impl/XKMSValidateResultImpl.cpp',
-    'xkms/impl/XKMSRSAKeyPairImpl.hpp',
     'xkms/impl/XKMSAuthenticationImpl.cpp',
-    'xkms/impl/XKMSNotBoundAuthenticationImpl.hpp',
-    'xkms/impl/XKMSCompoundRequestImpl.hpp',
-    'xkms/impl/XKMSPendingRequestImpl.hpp',
     'xkms/impl/XKMSStatusResultImpl.cpp',
-    'xkms/impl/XKMSStatusImpl.hpp',
-    'xkms/impl/XKMSRegisterRequestImpl.hpp',
     'xkms/impl/XKMSReissueRequestImpl.cpp',
     'xkms/impl/XKMSKeyBindingImpl.cpp',
-    'xkms/impl/XKMSUseKeyWithImpl.hpp',
     'xkms/impl/XKMSRequestAbstractTypeImpl.cpp',
     'xkms/impl/XKMSRespondWithImpl.cpp',
-    'xkms/impl/XKMSResponseMechanismImpl.hpp',
-    'xkms/impl/XKMSResultImpl.hpp',
     'xkms/impl/XKMSReissueResultImpl.cpp',
-    'xkms/impl/XKMSAuthenticationImpl.hpp',
     'xkms/impl/XKMSMessageAbstractTypeImpl.cpp',
     'xkms/impl/XKMSRevokeResultImpl.cpp',
-    'xkms/impl/XKMSStatusResultImpl.hpp',
-    'xkms/impl/XKMSReissueKeyBindingImpl.hpp',
-    'xkms/impl/XKMSRespondWithImpl.hpp',
     'xkms/impl/XKMSRevokeRequestImpl.cpp',
     'xkms/impl/XKMSPendingRequestImpl.cpp',
-    'xkms/impl/XKMSRecoverResultImpl.hpp',
     'xkms/impl/XKMSValidateRequestImpl.cpp',
-    'xkms/impl/XKMSStatusRequestImpl.hpp',
-    'xkms/impl/XKMSRecoverRequestImpl.hpp',
     'xkms/impl/XKMSRecoverKeyBindingImpl.cpp',
     'xkms/impl/XKMSRSAKeyPairImpl.cpp',
-    'xkms/impl/XKMSMessageAbstractTypeImpl.hpp',
     'xkms/impl/XKMSUnverifiedKeyBindingImpl.cpp',
-    'xkms/impl/XKMSValidityIntervalImpl.hpp',
-    'xkms/impl/XKMSLocateResultImpl.hpp',
     'xkms/impl/XKMSLocateRequestImpl.cpp',
     'xkms/impl/XKMSResultTypeImpl.cpp',
-    'xkms/impl/XKMSRecoverKeyBindingImpl.hpp',
     'xkms/impl/XKMSResultImpl.cpp',
     'xkms/impl/XKMSValidityIntervalImpl.cpp',
     'xkms/impl/XKMSRegisterRequestImpl.cpp',
-    'xkms/impl/XKMSReissueResultImpl.hpp',
     'xkms/impl/XKMSStatusImpl.cpp',
-    'xkms/impl/XKMSReissueRequestImpl.hpp',
     'xkms/impl/XKMSStatusRequestImpl.cpp',
     'xkms/impl/XKMSReissueKeyBindingImpl.cpp',
-    'xkms/impl/XKMSKeyBindingImpl.hpp',
-    'xkms/impl/XKMSValidateRequestImpl.hpp',
-    'xkms/impl/XKMSKeyBindingAbstractTypeImpl.hpp',
-    'xkms/impl/XKMSResultTypeImpl.hpp',
     'xkms/impl/XKMSMessageFactoryImpl.cpp',
-    'xkms/impl/XKMSRevokeRequestImpl.hpp',
     'xkms/impl/XKMSResponseMechanismImpl.cpp',
     'xkms/impl/XKMSNotBoundAuthentication.cpp',
-    'xkms/impl/XKMSLocateRequestImpl.hpp',
     'xkms/impl/XKMSLocateResultImpl.cpp',
-    'xkms/impl/XKMSRequestAbstractTypeImpl.hpp',
     'xkms/impl/XKMSQueryKeyBindingImpl.cpp',
     'xkms/impl/XKMSUseKeyWithImpl.cpp',
-    'xkms/impl/XKMSMessageFactoryImpl.hpp',
-    'xkms/impl/XKMSPrototypeKeyBindingImpl.hpp',
-    'xkms/impl/XKMSRegisterResultImpl.hpp',
 ]
 
 # 'Conditional', 'crypto', 'routines',
@@ -238,6 +201,17 @@ nss_sources = [
     'enc/NSS/NSSCryptoKeyHMAC.cpp',
 ]
 
+wincapi_sources = [
+    'enc/WinCAPI/WinCAPICryptoHash.cpp',
+    'enc/WinCAPI/WinCAPICryptoHashHMAC.cpp',
+    'enc/WinCAPI/WinCAPICryptoKeyDSA.cpp',
+    'enc/WinCAPI/WinCAPICryptoKeyHMAC.cpp',
+    'enc/WinCAPI/WinCAPICryptoKeyRSA.cpp',
+    'enc/WinCAPI/WinCAPICryptoProvider.cpp',
+    'enc/WinCAPI/WinCAPICryptoSymmetricKey.cpp',
+    'enc/WinCAPI/WinCAPICryptoX509.cpp',
+]
+
 libxmlsecurityc_sources = \
     canon_sources + \
     dsig_sources + \
@@ -250,8 +224,15 @@ libxmlsecurityc_sources = \
     openssl_sources + \
     nss_sources
 
+if host_system == 'windows'
+    libxmlsecurityc_sources += wincapi_sources
+endif
+
 libxmlsecurityc_deps = [xercesc_dep]
-if openssl_dep.found()
+
+if host_system == 'windows'
+    libxmlsecurityc_deps += cxx.find_library('crypt32')
+elif openssl_dep.found()
     libxmlsecurityc_deps += openssl_dep
 endif
 

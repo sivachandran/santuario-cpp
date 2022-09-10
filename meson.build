@@ -15,10 +15,26 @@ config_data = configuration_data()
 if host_system == 'linux'
     add_project_arguments(['-D_FILE_OFFSET_BITS=64'], language: ['cpp'])
     config_data.set('FILE_OFFSET_BITS', 64)
+elif host_system == 'windows'
+    add_project_arguments([
+        '-DWIN32',
+        '-D_WINDOWS',
+        '-D_USRDLL',
+        '-DXSEC_HAVE_WINCAPI',
+        ],
+        language: ['cpp'],
+    )
 endif
 
 if get_option('enable-debug').enabled()
     add_project_arguments(['-D_DEBUG'], language: ['cpp'])
+    if host_system == 'windows'
+        add_project_arguments(['-D_XSEC_DO_MEMDEBUG'], language: ['cpp'])
+    endif
+else
+    if host_system == 'windows'
+        add_project_arguments(['-D_CRT_SECURE_NO_DEPRECATE', '-DNDEBUG'], language: ['cpp'])
+    endif
 endif
 
 # TODO: configure and generate xml-security-c.pc
@@ -185,7 +201,7 @@ if nss_dep.found()
 endif
 
 config_data.set('XSEC_HAVE_WINCAPI', false)
-if host_system == 'windows' and not openssl_dep.found() and not nss_dep.found()
+if host_system == 'windows'
     config_data.set('XSEC_HAVE_WINCAPI', 1)
 endif
 
