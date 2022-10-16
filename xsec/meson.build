@@ -274,7 +274,7 @@ libxmlsecurityc_lib = library('xml-security-c', libxmlsecurityc_sources,
 )
 
 libxmlsecurity_dep = declare_dependency(
-    include_directories: include_directories('.'),
+    include_directories: include_directories(['.', '..']),
     dependencies: libxmlsecurityc_deps,
     link_with: libxmlsecurityc_lib,
 )
