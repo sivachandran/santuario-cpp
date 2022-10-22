@@ -123,66 +123,81 @@ config_data.set('XSEC_OPENSSL_D2IX509_CONST_BUFFER', false)
 if openssl_dep.found()
     config_data.set('XSEC_HAVE_OPENSSL', 1)
 
-    code = '''
-    #include <openssl/rsa.h>
-    int main() {
-        const unsigned char * buf;
-        unsigned char * outbuf;
-        RSA rsa;
-        RSA_private_decrypt(1,buf,outbuf,&rsa,RSA_PKCS1_PADDING);
-        return 0;
-    }
-    '''
-    if cxx.compiles(code, name: 'const input buffers in OpenSSL', dependencies: openssl_dep)
-        config_data.set('XSEC_OPENSSL_CONST_BUFFERS', 1)
-    endif
-
-    if cxx.has_header_symbol('openssl/evp.h', 'EVP_PKEY_id', dependencies: openssl_dep)
+    # we can't use subproject openssl dependency with 'compiles' or 'links' dependency.
+    # so we are hardcoding the config values. the config values are determined by compiling/linking
+    # the below snippets with openssl 1.1.1l externally
+    if openssl_dep.type_name() == 'internal'
         config_data.set('XSEC_OPENSSL_HAVE_EVP_PKEY_ID', 1)
-    endif
-
-    code = '''
-    #include <openssl/evp.h>
-    int main() { EVP_aes_256_cbc(); return 0; }
-    '''
-    if cxx.links(code, name: 'non-broken AES support', dependencies: openssl_dep)
         config_data.set('XSEC_OPENSSL_HAVE_AES', 1)
-    endif
-
-    code = '''
-    #include <openssl/evp.h>
-    int main() { EVP_aes_256_gcm(); return 0; }
-    '''
-    if cxx.links(code, name: 'GCM support', dependencies: openssl_dep)
         config_data.set('XSEC_OPENSSL_HAVE_GCM', 1)
-    endif
-
-    if cxx.has_header_symbol('openssl/rsa.h', 'PKCS1_MGF1', dependencies: openssl_dep)
         config_data.set('XSEC_OPENSSL_HAVE_MGF1', 1)
-    endif
-
-    if cxx.has_header_symbol('openssl/evp.h', 'EVP_PKEY_set1_EC_KEY', dependencies: openssl_dep)
         config_data.set('XSEC_OPENSSL_HAVE_EC', 1)
-    endif
-
-    if cxx.has_header_symbol('openssl/evp.h', 'EVP_sha512', dependencies: openssl_dep)
         config_data.set('XSEC_OPENSSL_HAVE_SHA2', 1)
-    endif
-
-    if cxx.has_header_symbol('openssl/evp.h', 'EVP_CIPHER_CTX_set_padding', dependencies: openssl_dep)
         config_data.set('XSEC_OPENSSL_CANSET_PADDING', 1)
-    endif
-
-    if cxx.has_header_symbol('openssl/crypto.h', 'CRYPTO_cleanup_all_ex_data', dependencies: openssl_dep)
         config_data.set('XSEC_OPENSSL_HAVE_CRYPTO_CLEANUP_ALL_EX_DATA', 1)
-    endif
-
-    code = '''
-    #include <openssl/x509.h>
-    int main() { const unsigned char * buf; d2i_X509(NULL, &buf, 1); return 0;}
-    '''
-    if cxx.compiles(code, name: 'const input buffer in loadX509Base64Bin', dependencies: openssl_dep)
         config_data.set('XSEC_OPENSSL_D2IX509_CONST_BUFFER', 1)
+    else
+        code = '''
+        #include <openssl/rsa.h>
+        int main() {
+            const unsigned char * buf;
+            unsigned char * outbuf;
+            RSA rsa;
+            RSA_private_decrypt(1,buf,outbuf,&rsa,RSA_PKCS1_PADDING);
+            return 0;
+        }
+        '''
+        if cxx.compiles(code, name: 'const input buffers in OpenSSL', dependencies: openssl_dep)
+            config_data.set('XSEC_OPENSSL_CONST_BUFFERS', 1)
+        endif
+
+        if cxx.has_header_symbol('openssl/evp.h', 'EVP_PKEY_id', dependencies: openssl_dep)
+            config_data.set('XSEC_OPENSSL_HAVE_EVP_PKEY_ID', 1)
+        endif
+
+        code = '''
+        #include <openssl/evp.h>
+        int main() { EVP_aes_256_cbc(); return 0; }
+        '''
+        if cxx.links(code, name: 'non-broken AES support', dependencies: openssl_dep)
+            config_data.set('XSEC_OPENSSL_HAVE_AES', 1)
+        endif
+
+        code = '''
+        #include <openssl/evp.h>
+        int main() { EVP_aes_256_gcm(); return 0; }
+        '''
+        if cxx.links(code, name: 'GCM support', dependencies: openssl_dep)
+            config_data.set('XSEC_OPENSSL_HAVE_GCM', 1)
+        endif
+
+        if cxx.has_header_symbol('openssl/rsa.h', 'PKCS1_MGF1', dependencies: openssl_dep)
+            config_data.set('XSEC_OPENSSL_HAVE_MGF1', 1)
+        endif
+
+        if cxx.has_header_symbol('openssl/evp.h', 'EVP_PKEY_set1_EC_KEY', dependencies: openssl_dep)
+            config_data.set('XSEC_OPENSSL_HAVE_EC', 1)
+        endif
+
+        if cxx.has_header_symbol('openssl/evp.h', 'EVP_sha512', dependencies: openssl_dep)
+            config_data.set('XSEC_OPENSSL_HAVE_SHA2', 1)
+        endif
+
+        if cxx.has_header_symbol('openssl/evp.h', 'EVP_CIPHER_CTX_set_padding', dependencies: openssl_dep)
+            config_data.set('XSEC_OPENSSL_CANSET_PADDING', 1)
+        endif
+
+        if cxx.has_header_symbol('openssl/crypto.h', 'CRYPTO_cleanup_all_ex_data', dependencies: openssl_dep)
+            config_data.set('XSEC_OPENSSL_HAVE_CRYPTO_CLEANUP_ALL_EX_DATA', 1)
+        endif
+
+        code = '''
+        #include <openssl/x509.h>
+        int main() { const unsigned char * buf; d2i_X509(NULL, &buf, 1); return 0;}
+        '''
+        if cxx.compiles(code, name: 'const input buffer in loadX509Base64Bin', dependencies: openssl_dep)
+            config_data.set('XSEC_OPENSSL_D2IX509_CONST_BUFFER', 1)
+        endif
     endif
 endif
 
