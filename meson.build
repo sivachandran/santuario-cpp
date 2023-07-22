@@ -20,7 +20,7 @@ elif host_system == 'windows'
         '-DWIN32',
         '-D_WINDOWS',
         '-D_USRDLL',
-        '-DXSEC_HAVE_WINCAPI',
+#        '-DXSEC_HAVE_WINCAPI',
         ],
         language: ['cpp'],
     )
@@ -106,7 +106,12 @@ endif
 if get_option('with-openssl') != ''
     openssl_dep = dependency('openssl', modules: 'libcrypto', dirs: [get_option('with-openssl')])
 else
-    openssl_dep = dependency('openssl', modules: 'libcrypto', required: false)
+    if host_system == 'windows'
+        openssl_dep = dependency('openssl', method: 'cmake', cmake_args: ['-DOPENSSL_MSVC_STATIC_RT=true', '-DOPENSSL_USE_STATIC_LIBS=true'], modules: ['libcrypto'])
+        add_project_arguments(['-DXSEC_HAVE_OPENSSL'], language: ['cpp'])
+    else
+        openssl_dep = dependency('openssl', modules: 'libcrypto')
+    endif
 endif
 
 config_data.set('XSEC_HAVE_OPENSSL', false)
@@ -215,10 +220,10 @@ if nss_dep.found()
     message('WARNING: NSS is no longer officially supported')
 endif
 
-config_data.set('XSEC_HAVE_WINCAPI', false)
-if host_system == 'windows'
-    config_data.set('XSEC_HAVE_WINCAPI', 1)
-endif
+# config_data.set('XSEC_HAVE_WINCAPI', false)
+# if host_system == 'windows'
+#     config_data.set('XSEC_HAVE_WINCAPI', 1)
+# endif
 
 config_data.set('XSEC_XKMS_ENABLED', false)
 xsec_xkms_enabled = false

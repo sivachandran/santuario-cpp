@@ -70,6 +70,7 @@ XSECPlatformUtils::TransformFactory* XSECPlatformUtils::g_loggingSink = NULL;
 #if defined (XSEC_HAVE_OPENSSL)
 #	define XSEC_DEFAULT_PROVIDER	OpenSSLCryptoProvider()
 #else
+# 	error OpenSSL crypto provider not enabled
 #	if defined (XSEC_HAVE_WINCAPI)
 #		define XSEC_DEFAULT_PROVIDER	WinCAPICryptoProvider()
 #	else 
@@ -89,7 +90,6 @@ TXFMBase* TXFMOutputFileFactory(DOMDocument* doc) {
 }
 
 void XSECPlatformUtils::Initialise(XSECCryptoProvider * p) {
-
 	if (++initCount > 1)
 		return;
 

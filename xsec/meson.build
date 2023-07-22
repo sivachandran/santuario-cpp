@@ -230,10 +230,10 @@ endif
 
 libxmlsecurityc_deps = [xercesc_dep]
 
-if host_system == 'windows'
-    libxmlsecurityc_deps += cxx.find_library('crypt32')
-elif openssl_dep.found()
+if openssl_dep.found()
     libxmlsecurityc_deps += openssl_dep
+elif host_system == 'windows'
+    libxmlsecurityc_deps += cxx.find_library('crypt32')
 endif
 
 if xalan_dep.found()
