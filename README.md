@@ -13,4 +13,5 @@ $ cmake --build build
 ```
 
 ## What is not ported?
-- Experimental crypto libraries system: NSS and WinCAPI
+- Experimental crypto libraries support, NSS and WinCAPI
+- XKMS support
