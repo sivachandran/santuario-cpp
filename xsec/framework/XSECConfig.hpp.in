@@ -12,29 +12,32 @@
 /* Define to 1 if Xalan is available. */
 #cmakedefine XSEC_HAVE_XALAN
 
-/* Define to 1 if OpenSSL has EVP_CIPHER_CTX_set_padding. */
-#cmakedefine XSEC_OPENSSL_CANSET_PADDING
+/*
+ * Some settings for OpenSSL if we have it
+ *
+ */
 
-/* Define to 1 if OpenSSL uses const input buffers. */
-#cmakedefine XSEC_OPENSSL_CONST_BUFFERS
+#if defined (XSEC_HAVE_OPENSSL)
 
-/* Define to 1 if OpenSSL X509 API has const input buffer. */
-#cmakedefine XSEC_OPENSSL_D2IX509_CONST_BUFFER
+#	include <openssl/opensslv.h>
+#	if (OPENSSL_VERSION_NUMBER >= 0x00907000)
+#		define XSEC_OPENSSL_CONST_BUFFERS
+#		define XSEC_OPENSSL_HAVE_AES
+#       define XSEC_OPENSSL_HAVE_EC
+#		define XSEC_OPENSSL_CANSET_PADDING
+#		define XSEC_OPENSSL_HAVE_CRYPTO_CLEANUP_ALL_EX_DATA
+#	endif
+#	if (OPENSSL_VERSION_NUMBER >= 0x00908000)
+#		define XSEC_OPENSSL_D2IX509_CONST_BUFFER
+#       define XSEC_OPENSSL_HAVE_SHA2
+#       define XSEC_OPENSSL_HAVE_MGF1
+#       define XSEC_OPENSSL_HAVE_EVP_PKEY_ID
+#	endif
+#	if (OPENSSL_VERSION_NUMBER >= 0x10001000)
+#		define XSEC_OPENSSL_HAVE_GCM
+#	endif
 
-/* Define to 1 if OpenSSL has full AES support. */
-#cmakedefine XSEC_OPENSSL_HAVE_AES
-
-/* Define to 1 if OpenSSL has GCM support. */
-#cmakedefine XSEC_OPENSSL_HAVE_GCM
-
-/* Define to 1 if OpenSSL has CRYPTO_cleanup_all_ex_data. */
-#cmakedefine XSEC_OPENSSL_HAVE_CRYPTO_CLEANUP_ALL_EX_DATA
-
-/* Define to 1 if OpenSSL has EC support. */
-#cmakedefine XSEC_OPENSSL_HAVE_EC
-
-/* Define to 1 if OpenSSL has SHA2 support. */
-#cmakedefine XSEC_OPENSSL_HAVE_SHA2
+#endif
 
 /* Define to 1 if XKMS support is included. */
 #cmakedefine XSEC_XKMS_ENABLED
