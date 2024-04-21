@@ -9,7 +9,6 @@ project(
   LANGUAGES CXX)
 
 option(USE_XALAN "Enable Xalan integration" OFF)
-option(USE_OPENSSL "Use OpenSSL as crypto library" ON)
 
 find_package(XercesC REQUIRED)
 
@@ -18,10 +17,8 @@ if(USE_XALAN)
   set(XSEC_HAVE_XALAN TRUE)
 endif()
 
-if(USE_OPENSSL)
-  find_package(OpenSSL REQUIRED)
-  set(XSEC_HAVE_OPENSSL TRUE)
-endif()
+find_package(OpenSSL REQUIRED)
+set(XSEC_HAVE_OPENSSL TRUE)
 
 set(SOURCES
     xsec/enc/XSECCryptoX509.cpp
@@ -179,12 +176,8 @@ target_include_directories(
   xml-security-c PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
                          ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(xml-security-c XercesC::XercesC)
+target_link_libraries(xml-security-c XercesC::XercesC OpenSSL::Crypto)
 
 if(USE_XALAN)
   target_link_libraries(xml-security-c XalanC::XalanC)
-endif()
-
-if(USE_OPENSSL)
-target_link_libraries(xml-security-c OpenSSL::Crypto)
 endif()
