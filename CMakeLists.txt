@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.20...3.27)
 
+include(CheckCXXSourceCompiles)
+
 project(
   xml-security-c
   VERSION 2.0.4
@@ -7,12 +9,18 @@ project(
   LANGUAGES CXX)
 
 option(USE_XALAN "Enable Xalan integration")
+option(USE_OPENSSL "Use OpenSSL as crypto library")
 
 find_package(XercesC REQUIRED)
 
 if(USE_XALAN)
   find_package(XalanC REQUIRED)
   set(XSEC_HAVE_XALAN TRUE)
+endif()
+
+if(USE_OPENSSL)
+  find_package(OpenSSL REQUIRED)
+  set(XSEC_HAVE_OPENSSL TRUE)
 endif()
 
 set(SOURCES
@@ -166,10 +174,17 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/xsec/framework/XSECConfig.hpp.in
                ${CMAKE_CURRENT_BINARY_DIR}/xsec/framework/XSECConfig.hpp)
 
 add_library(xml-security-c ${SOURCES})
+
 target_include_directories(
   xml-security-c PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
                          ${CMAKE_CURRENT_BINARY_DIR})
+
 target_link_libraries(xml-security-c XercesC::XercesC)
+
 if(USE_XALAN)
   target_link_libraries(xml-security-c XalanC::XalanC)
+endif()
+
+if(USE_OPENSSL)
+target_link_libraries(xml-security-c OpenSSL::Crypto)
 endif()
