@@ -6,7 +6,14 @@ project(
   DESCRIPTION "Apache XML security C++ library"
   LANGUAGES CXX)
 
+option(USE_XALAN "Enable Xalan integration")
+
 find_package(XercesC REQUIRED)
+
+if(USE_XALAN)
+  find_package(XalanC REQUIRED)
+  set(XSEC_HAVE_XALAN TRUE)
+endif()
 
 set(SOURCES
     xsec/enc/XSECCryptoX509.cpp
@@ -162,3 +169,7 @@ add_library(xml-security-c ${SOURCES})
 target_include_directories(
   xml-security-c PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
                          ${CMAKE_CURRENT_BINARY_DIR})
+target_link_libraries(xml-security-c XercesC::XercesC)
+if(USE_XALAN)
+  target_link_libraries(xml-security-c XalanC::XalanC)
+endif()
