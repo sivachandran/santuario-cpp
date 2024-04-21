@@ -1,4 +1,4 @@
-# xml-security-c++
+# Xml-Security-C++ with CMake support
 
 ## Build
 ```bash
@@ -13,6 +13,4 @@ $ cmake --build build
 ```
 
 ## What is not ported?
-- Support for NSS as crypto library.
-    - CMake support(find_package) is not readily available
-    - NSS support is experimental in Xml-Security-C++
+- Experimental crypto libraries system: NSS and WinCAPI
