@@ -8,8 +8,8 @@ project(
   DESCRIPTION "Apache XML security C++ library"
   LANGUAGES CXX)
 
-option(USE_XALAN "Enable Xalan integration")
-option(USE_OPENSSL "Use OpenSSL as crypto library")
+option(USE_XALAN "Enable Xalan integration" OFF)
+option(USE_OPENSSL "Use OpenSSL as crypto library" ON)
 
 find_package(XercesC REQUIRED)
 
