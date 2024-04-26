@@ -6,3 +6,4 @@ RUN apt -y update && \
 
 RUN apt -y install cmake
 RUN apt -y install libxerces-c-dev libxalan-c-dev
+RUN apt -y install libssl-dev

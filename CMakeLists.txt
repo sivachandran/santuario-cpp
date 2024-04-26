@@ -173,11 +173,44 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/xsec/framework/XSECConfig.hpp.in
 add_library(xml-security-c ${SOURCES})
 
 target_include_directories(
-  xml-security-c PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
-                         ${CMAKE_CURRENT_BINARY_DIR})
+  xml-security-c
+  PUBLIC $<INSTALL_INTERFACE:include>
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(xml-security-c XercesC::XercesC OpenSSL::Crypto)
+target_link_libraries(xml-security-c PUBLIC XercesC::XercesC OpenSSL::Crypto)
 
 if(USE_XALAN)
-  target_link_libraries(xml-security-c XalanC::XalanC)
+  target_link_libraries(xml-security-c PUBLIC XalanC::XalanC)
 endif()
+
+if(WIN32)
+  set(xmlsecurityc_config_dir "cmake")
+else()
+  set(xmlsecurityc_config_dir "${CMAKE_INSTALL_LIBDIR}/cmake/XmlSecurityC")
+endif()
+
+install(TARGETS xml-security-c
+  EXPORT XmlSecurityCConfigInternal
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  COMPONENT "runtime"
+  INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+install(EXPORT XmlSecurityCConfigInternal
+        DESTINATION "${xmlsecurityc_config_dir}"
+        NAMESPACE "xmlsecurityc_"
+        COMPONENT "development")
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/XmlSecurityCConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/XmlSecurityCConfig.cmake"
+  INSTALL_DESTINATION "${xmlsecurityc_config_dir}")
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/XmlSecurityCConfigVersion.cmake
+  VERSION "${PROJECT_VERSION}"
+  COMPATIBILITY SameMajorVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/XmlSecurityCConfig.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/XmlSecurityCConfigVersion.cmake
+              DESTINATION "${xmlsecurityc_config_dir}")

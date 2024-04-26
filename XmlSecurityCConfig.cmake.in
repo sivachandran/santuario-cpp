@@ -1,0 +1,14 @@
+@PACKAGE_INIT@
+
+include(${CMAKE_CURRENT_LIST_DIR}/XmlSecurityCConfigInternal.cmake)
+
+find_package(OpenSSL REQUIRED)
+find_package(XercesC REQUIRED)
+
+add_library(XmlSecurityC::XmlSecurityC INTERFACE IMPORTED)
+set_target_properties(XmlSecurityC::XmlSecurityC PROPERTIES INTERFACE_LINK_LIBRARIES xmlsecurityc_xml-security-c)
+
+# For compatibility with FindXmlSecurityC.
+set(XmlSecurityC_VERSION "@xml-security-c_VERSION@")
+get_target_property(XmlSecurityC_INCLUDE_DIRS xmlsecurityc_xml-security-c INTERFACE_INCLUDE_DIRECTORIES)
+set(XmlSecurityC_LIBRARIES XmlSecurityC::XmlSecurityC)
