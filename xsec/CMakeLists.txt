@@ -19,10 +19,10 @@ set(encinclude_HEADERS
     enc/XSECCryptoKeyRSA.hpp
     enc/XSECCryptoException.hpp
     enc/XSECCryptoUtils.hpp)
-  
+
 set(xscryptinclude_HEADERS
     enc/XSCrypt/XSCryptCryptoBase64.hpp)
-  
+
 set(opensslinclude_HEADERS
     enc/OpenSSL/OpenSSLCryptoBase64.hpp
     enc/OpenSSL/OpenSSLCryptoSymmetricKey.hpp
@@ -35,7 +35,7 @@ set(opensslinclude_HEADERS
     enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp
     enc/OpenSSL/OpenSSLCryptoHash.hpp
     enc/OpenSSL/OpenSSLSupport.hpp)
-  
+
 set(nssinclude_HEADERS
     enc/NSS/NSSCryptoX509.hpp
     enc/NSS/NSSCryptoHashHMAC.hpp
@@ -45,7 +45,7 @@ set(nssinclude_HEADERS
     enc/NSS/NSSCryptoSymmetricKey.hpp
     enc/NSS/NSSCryptoProvider.hpp
     enc/NSS/NSSCryptoKeyRSA.hpp)
-  
+
 set(dsiginclude_HEADERS
     dsig/DSIGKeyInfoSPKIData.hpp
     dsig/DSIGXPathHere.hpp
@@ -74,7 +74,7 @@ set(dsiginclude_HEADERS
     dsig/DSIGKeyInfoName.hpp
     dsig/DSIGTransformEnvelope.hpp
     dsig/DSIGConstants.hpp)
-  
+
 set(frameworkinclude_HEADERS
     framework/XSECAlgorithmHandler.hpp
     framework/XSECURIResolver.hpp
@@ -87,10 +87,10 @@ set(frameworkinclude_HEADERS
     framework/XSECAlgorithmMapper.hpp
     framework/XSECW32Config.hpp
     framework/XSECVersion.hpp)
-  
+
 set(nodist_frameworkinclude_HEADERS
     framework/XSECConfig.hpp)
-  
+
 set(transformersinclude_HEADERS
     transformers/TXFMXPathFilter.hpp
     transformers/TXFMHash.hpp
@@ -109,7 +109,7 @@ set(transformersinclude_HEADERS
     transformers/TXFMXSL.hpp
     transformers/TXFMXPath.hpp
     transformers/TXFMBase64.hpp)
-  
+
 set(utilsinclude_HEADERS
     utils/XSECSafeBuffer.hpp
     utils/XSECSOAPRequestor.hpp
@@ -120,7 +120,7 @@ set(utilsinclude_HEADERS
     utils/XSECSafeBufferFormatter.hpp
     utils/XSECBinTXFMInputStream.hpp
     utils/XSECPlatformUtils.hpp)
-  
+
 set(xencinclude_HEADERS
     xenc/XENCEncryptionMethod.hpp
     xenc/XENCEncryptedType.hpp
@@ -130,7 +130,7 @@ set(xencinclude_HEADERS
     xenc/XENCEncryptedData.hpp
     xenc/XENCCipherReference.hpp
     xenc/XENCCipher.hpp)
-  
+
 set(xkmsinclude_HEADERS
     xkms/XKMSNotBoundAuthentication.hpp
     xkms/XKMSValidateResult.hpp
@@ -248,28 +248,27 @@ set(framework_SOURCES
     framework/XSECURIResolverXerces.cpp)
 
 set(txfm_SOURCES
-  transformers/TXFMBase.cpp
-  transformers/TXFMChain.cpp
-  transformers/TXFMCipher.cpp
-  transformers/TXFMParser.cpp
-  transformers/TXFMSB.cpp
-  transformers/TXFMEnvelope.cpp
-  transformers/TXFMBase64.cpp
-  transformers/TXFMXPathFilter.cpp
-  transformers/TXFMHash.cpp
-  transformers/TXFMC14n.cpp
-  transformers/TXFMURL.cpp
-  transformers/TXFMOutputFile.cpp
-  transformers/TXFMXPath.cpp
-  transformers/TXFMXSL.cpp
-  transformers/TXFMDocObject.cpp
-  transformers/TXFMConcatChains.cpp
-  transformers/TXFMChar.cpp)
+    transformers/TXFMBase.cpp
+    transformers/TXFMChain.cpp
+    transformers/TXFMCipher.cpp
+    transformers/TXFMParser.cpp
+    transformers/TXFMSB.cpp
+    transformers/TXFMEnvelope.cpp
+    transformers/TXFMBase64.cpp
+    transformers/TXFMXPathFilter.cpp
+    transformers/TXFMHash.cpp
+    transformers/TXFMC14n.cpp
+    transformers/TXFMURL.cpp
+    transformers/TXFMOutputFile.cpp
+    transformers/TXFMXPath.cpp
+    transformers/TXFMXSL.cpp
+    transformers/TXFMDocObject.cpp
+    transformers/TXFMConcatChains.cpp
+    transformers/TXFMChar.cpp)
 
-# Utility files.  Note we don't worry about checking
-# if the UNIX stuff is necessary - we just assume that
-# we are running on a *NIX system because compiling under
-# make.  Cygwin compiles use the UNIX utilities, not windows
+# Utility files.  Note we don't worry about checking if the UNIX stuff is
+# necessary - we just assume that we are running on a *NIX system because
+# compiling under make.  Cygwin compiles use the UNIX utilities, not windows
 
 set(utils_SOURCES
     utils/XSECAlgorithmSupport.hpp
@@ -388,7 +387,7 @@ set(xkms_SOURCES
     xkms/impl/XKMSMessageFactoryImpl.hpp
     xkms/impl/XKMSPrototypeKeyBindingImpl.hpp
     xkms/impl/XKMSRegisterResultImpl.hpp)
-  
+
 # Conditional crypto routines
 
 set(openssl_SOURCES
@@ -455,17 +454,19 @@ endif()
 
 include(GNUInstallDirs)
 
-install(TARGETS xml-security-c
+install(
+  TARGETS xml-security-c
   EXPORT XmlSecurityCConfigInternal
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  COMPONENT "runtime"
-  INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
-install(EXPORT XmlSecurityCConfigInternal
-        DESTINATION "${xmlsecurityc_config_dir}"
-        NAMESPACE "xmlsecurityc_"
-        COMPONENT "development")
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT "runtime"
+  INCLUDES
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+install(
+  EXPORT XmlSecurityCConfigInternal
+  DESTINATION "${xmlsecurityc_config_dir}"
+  NAMESPACE "xmlsecurityc_"
+  COMPONENT "development")
 
 include(CMakePackageConfigHelpers)
 
@@ -479,20 +480,20 @@ write_basic_package_version_file(
   COMPATIBILITY SameMajorVersion)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/XmlSecurityCConfig.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/XmlSecurityCConfigVersion.cmake
-              DESTINATION "${xmlsecurityc_config_dir}")
+        DESTINATION "${xmlsecurityc_config_dir}")
 
 foreach(hdr IN LISTS include_HEADERS)
-    cmake_path(GET hdr PARENT_PATH hdrdir)
-    install(
-        FILES "${hdr}"
-        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/xsec/${hdrdir}"
-        COMPONENT "development")
+  cmake_path(GET hdr PARENT_PATH hdrdir)
+  install(
+    FILES "${hdr}"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/xsec/${hdrdir}"
+    COMPONENT "development")
 endforeach()
 
 foreach(hdr IN LISTS generatedinclude_HEADERS)
-    cmake_path(GET hdr PARENT_PATH hdrdir)
-    install(
-        FILES "${CMAKE_CURRENT_BINARY_DIR}/${hdr}"
-        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/xsec/${hdrdir}"
-        COMPONENT "development")
+  cmake_path(GET hdr PARENT_PATH hdrdir)
+  install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/${hdr}"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/xsec/${hdrdir}"
+    COMPONENT "development")
 endforeach()
