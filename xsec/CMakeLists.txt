@@ -11,6 +11,7 @@ set(xsec_simpleHMAC_SOURCES
     samples/IOStreamOutputter.cpp
     samples/IOStreamOutputter.hpp)
 add_executable(simpleHMAC EXCLUDE_FROM_ALL ${xsec_simpleHMAC_SOURCES})
+target_include_directories(simpleHMAC PRIVATE ${PROJECT_BINARY_DIR})
 target_link_libraries(simpleHMAC xml-security-c)
 add_dependencies(samples simpleHMAC)
 
@@ -21,6 +22,7 @@ set(xsec_simpleValidate_SOURCES
     samples/IOStreamOutputter.cpp
     samples/IOStreamOutputter.hpp)
 add_executable(simpleValidate EXCLUDE_FROM_ALL ${xsec_simpleValidate_SOURCES})
+target_include_directories(simpleValidate PRIVATE ${PROJECT_BINARY_DIR})
 target_link_libraries(simpleValidate xml-security-c)
 add_dependencies(samples simpleValidate)
 
@@ -31,6 +33,7 @@ set(xsec_simpleEncrypt_SOURCES
     samples/IOStreamOutputter.cpp
     samples/IOStreamOutputter.hpp)
 add_executable(simpleEncrypt EXCLUDE_FROM_ALL ${xsec_simpleEncrypt_SOURCES})
+target_include_directories(simpleEncrypt PRIVATE ${PROJECT_BINARY_DIR})
 target_link_libraries(simpleEncrypt xml-security-c)
 add_dependencies(samples simpleEncrypt)
 
@@ -41,8 +44,100 @@ set(xsec_simpleDecrypt_SOURCES
     samples/IOStreamOutputter.cpp
     samples/IOStreamOutputter.hpp)
 add_executable(simpleDecrypt EXCLUDE_FROM_ALL ${xsec_simpleDecrypt_SOURCES})
+target_include_directories(simpleDecrypt PRIVATE ${PROJECT_BINARY_DIR})
 target_link_libraries(simpleDecrypt xml-security-c)
 add_dependencies(samples simpleDecrypt)
+
+#
+# Finally we compile the tools that can be used to manipulate
+# XML Security inputs and outputs
+#
+
+add_custom_target(tools)
+set(TOOLS_DEFINITIONS "-DXSEC_BUILDING_TOOLS")
+
+if (NOT WIN32)
+  set(TOOLS_DEFINITIONS "${TOOLS_DEFINITIONS} -DHAVE_STRCASECMP -DHAVE_UNISTD_H")
+endif()
+
+# xtest
+
+set(xsec_xtest_SOURCES
+    tools/xtest/xtest.cpp)
+add_executable(xtest EXCLUDE_FROM_ALL ${xsec_xtest_SOURCES})
+target_compile_definitions(xtest PUBLIC ${TOOLS_DEFINITIONS})
+target_include_directories(xtest PRIVATE ${PROJECT_BINARY_DIR})
+target_link_libraries(xtest xml-security-c)
+add_dependencies(tools xtest)
+
+# c14n
+set(xsec_c14n_SOURCES
+   tools/c14n/c14n.cpp)
+add_executable(c14n EXCLUDE_FROM_ALL ${xsec_c14n_SOURCES})
+target_compile_definitions(c14n PUBLIC ${TOOLS_DEFINITIONS})
+target_include_directories(c14n PRIVATE ${PROJECT_BINARY_DIR})
+target_link_libraries(c14n xml-security-c)
+add_dependencies(tools c14n)
+
+# checksig
+set(xsec_checksig_SOURCES
+    tools/checksig/checksig.cpp
+    tools/checksig/AnonymousResolver.hpp
+    tools/checksig/AnonymousResolver.cpp
+    tools/checksig/InteropResolver.hpp
+    tools/checksig/InteropResolver.cpp)
+add_executable(checksig EXCLUDE_FROM_ALL ${xsec_checksig_SOURCES})
+target_compile_definitions(checksig PUBLIC ${TOOLS_DEFINITIONS})
+target_include_directories(checksig PRIVATE ${PROJECT_BINARY_DIR})
+target_link_libraries(checksig xml-security-c)
+add_dependencies(tools checksig)
+
+# templatesign
+set(xsec_templatesign_SOURCES
+    tools/templatesign/templatesign.cpp)
+add_executable(templatesign EXCLUDE_FROM_ALL ${xsec_templatesign_SOURCES})
+target_compile_definitions(templatesign PUBLIC ${TOOLS_DEFINITIONS})
+target_include_directories(templatesign PRIVATE ${PROJECT_BINARY_DIR})
+target_link_libraries(templatesign xml-security-c)
+add_dependencies(tools templatesign)
+
+# txfmout
+set(xsec_txfmout_SOURCES
+    tools/txfmout/txfmout.cpp)
+add_executable(txfmout EXCLUDE_FROM_ALL ${xsec_txfmout_SOURCES})
+target_compile_definitions(txfmout PUBLIC ${TOOLS_DEFINITIONS})
+target_include_directories(txfmout PRIVATE ${PROJECT_BINARY_DIR})
+target_link_libraries(txfmout xml-security-c)
+add_dependencies(tools txfmout)
+
+# siginf
+set(xsec_siginf_SOURCES
+    tools/siginf/siginf.cpp)
+add_executable(siginf EXCLUDE_FROM_ALL ${xsec_siginf_SOURCES})
+target_compile_definitions(siginf PUBLIC ${TOOLS_DEFINITIONS})
+target_include_directories(siginf PRIVATE ${PROJECT_BINARY_DIR})
+target_link_libraries(siginf xml-security-c)
+add_dependencies(tools siginf)
+
+# cipher
+set(xsec_cipher_SOURCES
+    tools/cipher/cipher.cpp
+    tools/cipher/XencInteropResolver.hpp
+    tools/cipher/XencInteropResolver.cpp)
+add_executable(cipher EXCLUDE_FROM_ALL ${xsec_cipher_SOURCES})
+target_compile_definitions(cipher PUBLIC ${TOOLS_DEFINITIONS})
+target_include_directories(cipher PRIVATE ${PROJECT_BINARY_DIR})
+target_link_libraries(cipher xml-security-c)
+add_dependencies(tools cipher)
+
+# xklient
+# set(xsec_xklient_SOURCES
+#     tools/xklient/xklient.cpp
+#     enc/OpenSSL/OpenSSLSupport.hpp)
+# add_executable(xklient EXCLUDE_FROM_ALL ${xsec_xklient_SOURCES})
+# target_compile_definitions(xklient PUBLIC -DXSEC_BUILDING_TOOLS)
+# target_link_libraries(xklient OpenSSL::Crypto)
+# add_dependencies(tools xklient)
 
 set(canoninclude_HEADERS
     canon/XSECXMLNSStack.hpp
@@ -474,14 +569,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/framework/XSECConfig.hpp.in
 
 add_library(xml-security-c ${SOURCES})
 
-cmake_path(GET CMAKE_CURRENT_SOURCE_DIR PARENT_PATH PARENT_SOURCE_DIR)
-cmake_path(GET CMAKE_CURRENT_BINARY_DIR PARENT_PATH PARENT_BINARY_DIR)
-
 target_include_directories(
   xml-security-c
   PUBLIC $<INSTALL_INTERFACE:include>
-         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
+  PRIVATE ${PROJECT_BINARY_DIR})
 
 target_link_libraries(xml-security-c PUBLIC XercesC::XercesC OpenSSL::Crypto)
 
