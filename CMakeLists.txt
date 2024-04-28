@@ -656,3 +656,18 @@ foreach(hdr IN LISTS generatedinclude_HEADERS)
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${hdrdir}"
     COMPONENT "development")
 endforeach()
+
+# Generate pkg-config file
+set(pkgconfig-dir "${CMAKE_INSTALL_LIBDIR}/pkgconfig" CACHE STRING "pkg-config installation directory (default ${CMAKE_INSTALL_LIBDIR}/pkgconfig)")
+set(PKGCONFIGDIR "${pkgconfig-dir}")
+
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(exec_prefix "${CMAKE_INSTALL_PREFIX}")
+set(libdir "${CMAKE_INSTALL_FULL_LIBDIR}")
+set(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/xml-security-c.pc.in
+               ${CMAKE_CURRENT_BINARY_DIR}/xml-security-c.pc)
+install(
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/xml-security-c.pc
+  DESTINATION "${PKGCONFIGDIR}"
+  COMPONENT "development")
