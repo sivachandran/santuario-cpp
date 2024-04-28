@@ -48,8 +48,8 @@
 #	endif
 #	define WIN32_LEAN_AND_MEAN
 #	include <windows.h>
-#elif defined(XSEC_BUILDING_LIBRARY) || defined(XSEC_BUILDING_TOOLS)
-#   include "config.h"
+// #elif defined(XSEC_BUILDING_LIBRARY) || defined(XSEC_BUILDING_TOOLS)
+// #   include "config.h"
 #else
 #	include <xsec/framework/XSECConfig.hpp>
 #endif
