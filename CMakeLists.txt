@@ -250,9 +250,6 @@ set(frameworkinclude_HEADERS
     xsec/framework/XSECW32Config.hpp
     xsec/framework/XSECVersion.hpp)
 
-set(nodist_frameworkinclude_HEADERS
-    xsec/framework/XSECConfig.hpp)
-
 set(transformersinclude_HEADERS
     xsec/transformers/TXFMXPathFilter.hpp
     xsec/transformers/TXFMHash.hpp
@@ -348,9 +345,6 @@ set(include_HEADERS
     ${canoninclude_HEADERS}
     ${XENCAlgorithmHandlerDefault}
     ${XSECAlgorithmSupport})
-
-set(generatedinclude_HEADERS
-    ${nodist_frameworkinclude_HEADERS})
 
 # canon
 
@@ -649,13 +643,11 @@ foreach(hdr IN LISTS include_HEADERS)
     COMPONENT "development")
 endforeach()
 
-foreach(hdr IN LISTS generatedinclude_HEADERS)
-  cmake_path(GET hdr PARENT_PATH hdrdir)
-  install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/${hdr}"
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${hdrdir}"
-    COMPONENT "development")
-endforeach()
+# Install configure data file xsec/framework/XSECConfig.hpp
+install(
+  FILES "${CMAKE_CURRENT_BINARY_DIR}/xsec/framework/XSECConfig.hpp"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/xsec/framework"
+  COMPONENT "development")
 
 # Generate pkg-config file
 set(pkgconfig-dir "${CMAKE_INSTALL_LIBDIR}/pkgconfig" CACHE STRING "pkg-config installation directory (default ${CMAKE_INSTALL_LIBDIR}/pkgconfig)")
