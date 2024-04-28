@@ -1,3 +1,48 @@
+#
+# The following are sample programs.  They are NOT installed
+#
+
+add_custom_target(samples)
+
+# HMAC sign
+
+set(xsec_simpleHMAC_SOURCES
+    samples/simpleHMAC.cpp
+    samples/IOStreamOutputter.cpp
+    samples/IOStreamOutputter.hpp)
+add_executable(simpleHMAC EXCLUDE_FROM_ALL ${xsec_simpleHMAC_SOURCES})
+target_link_libraries(simpleHMAC xml-security-c)
+add_dependencies(samples simpleHMAC)
+
+# HMAC validate
+
+set(xsec_simpleValidate_SOURCES
+    samples/simpleValidate.cpp
+    samples/IOStreamOutputter.cpp
+    samples/IOStreamOutputter.hpp)
+add_executable(simpleValidate EXCLUDE_FROM_ALL ${xsec_simpleValidate_SOURCES})
+target_link_libraries(simpleValidate xml-security-c)
+add_dependencies(samples simpleValidate)
+
+# Encrypt
+
+set(xsec_simpleEncrypt_SOURCES
+    samples/simpleEncrypt.cpp
+    samples/IOStreamOutputter.cpp
+    samples/IOStreamOutputter.hpp)
+add_executable(simpleEncrypt EXCLUDE_FROM_ALL ${xsec_simpleEncrypt_SOURCES})
+target_link_libraries(simpleEncrypt xml-security-c)
+add_dependencies(samples simpleEncrypt)
+
+# Decrypt
+
+set(xsec_simpleDecrypt_SOURCES
+    samples/simpleDecrypt.cpp
+    samples/IOStreamOutputter.cpp
+    samples/IOStreamOutputter.hpp)
+add_executable(simpleDecrypt EXCLUDE_FROM_ALL ${xsec_simpleDecrypt_SOURCES})
+target_link_libraries(simpleDecrypt xml-security-c)
+add_dependencies(samples simpleDecrypt)
 
 set(canoninclude_HEADERS
     canon/XSECXMLNSStack.hpp
