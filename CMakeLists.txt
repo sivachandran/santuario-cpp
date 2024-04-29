@@ -444,7 +444,7 @@ set(utils_SOURCES
 if (WIN32)
   list(APPEND utils_SOURCES xsec/utils/unixutils/XSECSOAPRequestorSimpleWin32.cpp)
 else()
-  list(APPEND utils_SOURCES xsec/utils/unixutils/XSECSOAPRequestorSimpleUnix.cpp)
+  list(APPEND utils_SOURCES xsec/utils/winutils/XSECSOAPRequestorSimpleUnix.cpp)
 endif()
 
 # XML Encryption
