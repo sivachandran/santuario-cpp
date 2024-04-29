@@ -439,8 +439,13 @@ set(utils_SOURCES
     xsec/utils/XSECSafeBufferFormatter.cpp
     xsec/utils/XSECNameSpaceExpander.cpp
     xsec/utils/XSECPlatformUtils.cpp
-    xsec/utils/XSECSOAPRequestorSimple.cpp
-    xsec/utils/unixutils/XSECSOAPRequestorSimpleUnix.cpp)
+    xsec/utils/XSECSOAPRequestorSimple.cpp)
+
+if (WIN32)
+  list(APPEND utils_SOURCES xsec/utils/unixutils/XSECSOAPRequestorSimpleWin32.cpp)
+else()
+  list(APPEND utils_SOURCES xsec/utils/unixutils/XSECSOAPRequestorSimpleUnix.cpp)
+endif()
 
 # XML Encryption
 
