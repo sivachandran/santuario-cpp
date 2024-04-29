@@ -49,7 +49,7 @@
  * interested in assisting with maintenance and support of that code.
  */
 
-// #define XSEC_HAVE_OPENSSL 1
+#define XSEC_HAVE_OPENSSL 1
 // #define XSEC_HAVE_WINCAPI 1
 // #define XSEC_HAVE_NSS 1
 
