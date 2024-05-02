@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20...3.27)
+cmake_minimum_required(VERSION 3.12...3.27)
 
 include(CheckCXXSourceCompiles)
 
@@ -641,7 +641,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/XmlSecurityCConfig.cmake
         DESTINATION "${xmlsecurityc_config_dir}")
 
 foreach(hdr IN LISTS include_HEADERS)
-  cmake_path(GET hdr PARENT_PATH hdrdir)
+  get_filename_component(hdrdir ${hdr} DIRECTORY)
   install(
     FILES "${hdr}"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${hdrdir}"
