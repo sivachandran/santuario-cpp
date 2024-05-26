@@ -1,0 +1,7 @@
+{
+  "dependencies": [
+    "xerces-c",
+    "openssl"
+  ],
+  "builtin-baseline": "829c9e3def84d777b609784d0820dbfa3284d342"
+}
