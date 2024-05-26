@@ -595,6 +595,7 @@ target_include_directories(
   xml-security-c
   PUBLIC $<INSTALL_INTERFACE:include>
          $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
   PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(xml-security-c PUBLIC XercesC::XercesC OpenSSL::Crypto)
