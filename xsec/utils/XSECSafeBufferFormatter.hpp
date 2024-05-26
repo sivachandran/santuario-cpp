@@ -62,6 +62,7 @@ public:
                     const XMLSize_t    count,
                     XERCES_CPP_NAMESPACE_QUALIFIER XMLFormatter * const formatter)
     {
+		(void)formatter;
          m_buffer->sbMemcpyIn(m_offset, (char *) toWrite, count);
 		 m_buffer->setBufferType(safeBuffer::BUFFER_CHAR);
 		 m_offset += count;
